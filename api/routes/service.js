@@ -16,8 +16,6 @@ const {
 const auth = require("../../config/auth");
 const upload = multer({ dest: "./upload" });
 
-router.post("/create", auth, serviceController.createService);
-router.put("/update/:id", auth, serviceController.updateService);
 router.put("/availability/:serviceId", auth, serviceController.toggleServiceAvailability);
 router.get("/get/all", serviceController.getAllService);
 router.get("/get/one/:id", serviceController.getOneService);
@@ -34,7 +32,6 @@ router.get("/cat/get", getCat);
 router.get("/cat/get/main", getMainCategory);
 router.post("/cat/get/first", getFirstSubCategory);
 router.post("/cat/get/second", getSecondSubCategory);
-router.delete("/delete/:id", serviceController.deleteService);
 router.post("/reviews", serviceController.addReview);
 router.put("/reviews", serviceController.updateReview);
 router.delete("/reviews", serviceController.deleteReview);

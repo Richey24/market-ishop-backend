@@ -53,6 +53,7 @@ const getProductById = async (id) => {
                     "attribute_line_ids",
                     "x_discount",
                     "x_featured_product",
+                    "x_total_available_qty",
                ],
           ]);
           if (productData.length === 0) {
@@ -201,6 +202,7 @@ const searchProducts = async (params) => {
                          "public_categ_ids",
                          "x_show_sold_count",
                          "x_discount",
+                         "x_total_available_qty",
                          "website_meta_keywords",
                     ],
                ],

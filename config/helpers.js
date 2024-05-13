@@ -2,40 +2,35 @@ const nodemailer = require("nodemailer");
 const Company = require("../model/Company");
 const cron = require("node-cron");
 const User = require("../model/User");
-const {
-  findCompanyByCompanyIdAndPopulateUser,
-} = require("../api/controllers/companyController");
-const OrderEmail = require("../model/OrderEmails");
-const Event = require("../model/Event");
 const Advert = require("../model/Advert");
 
 const sendOnboardingEmail = (email, name, type) => {
-  const startDate = new Date();
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + 14);
-  const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  const formattedDate = (dt) => dt.toLocaleDateString("en-US", options);
+     const startDate = new Date();
+     const endDate = new Date();
+     endDate.setDate(endDate.getDate() + 14);
+     const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+     const formattedDate = (dt) => dt.toLocaleDateString("en-US", options);
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  let subject, introMessage, benefitsMessage;
+     let subject, introMessage, benefitsMessage;
 
-  if (type === "ecommerce") {
-    subject = "Welcome to Our IMarketplace - Your Free Trial Period!";
-    introMessage = `
+     if (type === "ecommerce") {
+          subject = "Welcome to Our IMarketplace - Your Free Trial Period!";
+          introMessage = `
             <p>We are thrilled to welcome you as a new vendor on our vibrant and dynamic ecommerce marketplace.</p>
             <p>We understand that getting started in a new marketplace can be both thrilling and challenging, and we want to support you every step of the way. That is why we are delighted to offer you a free two-week trial period to set up and review your ecommerce store.</p>
             <p>During this trial period, you will have ample time to familiarize yourself with our platform, showcase your products, and ensure that your store is a true reflection of your brand.</p>
        `;
-    benefitsMessage = `
+          benefitsMessage = `
             <p><span class="highlight">Benefits of the Trial Period:</span></p>
             <ul>
               <li>Opportunity to create and customize your ecommerce store.</li>
@@ -46,13 +41,13 @@ const sendOnboardingEmail = (email, name, type) => {
               <li>Evaluate the effectiveness of our platform for your business.</li>
             </ul>
        `;
-  } else if (type === "service") {
-    subject = "Welcome to ImarketPlace Service - Your Free Trial Period!";
-    introMessage = `
+     } else if (type === "service") {
+          subject = "Welcome to ImarketPlace Service - Your Free Trial Period!";
+          introMessage = `
             <p>We are thrilled to welcome you to ImarketPlace Service, your partner in success and empowerment.</p>
             <p>Starting today, you have a free two-week trial period to explore the benefits of our consulting services. Take this time to set up your account, familiarize yourself with our expert consultants, and discover how Breaking Black can support and elevate your journey.</p>
        `;
-    benefitsMessage = `
+          benefitsMessage = `
             <p><span class="highlight">Benefits of Registering with ImarketPlace:</span></p>
             <ul>
               <li>Access to a team of experienced and diverse consultants.</li>
@@ -63,13 +58,13 @@ const sendOnboardingEmail = (email, name, type) => {
               <li>Regular updates on industry trends, diversity, and inclusion initiatives.</li>
             </ul>
        `;
-  }
+     }
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: subject,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: subject,
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -129,8 +124,9 @@ const sendOnboardingEmail = (email, name, type) => {
         <div class="container">
           <div class="header">
             <img class="logo" src="https://cdn.jsdelivr.net/gh/Richey24/imarket-cdn/src/assets/images/logo.png" alt="Company Logo">
-            <h1 style="color: #333333;">Welcome as a New ${type === "ecommerce" ? "Vendor" : "Member"
-      }!</h1>
+            <h1 style="color: #333333;">Welcome as a New ${
+                 type === "ecommerce" ? "Vendor" : "Member"
+            }!</h1>
           </div>
           <div class="message">
             <p>Dear ${name},</p>
@@ -160,38 +156,38 @@ const sendOnboardingEmail = (email, name, type) => {
       </body>
       </html>
     `,
-  };
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     };
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendWelcomeEmail = (email, name, type) => {
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + 14);
-  const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  const formattedDate = (dt) => dt.toLocaleDateString("en-US", options);
+     const endDate = new Date();
+     endDate.setDate(endDate.getDate() + 14);
+     const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+     const formattedDate = (dt) => dt.toLocaleDateString("en-US", options);
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  let subject, introMessage;
+     let subject, introMessage;
 
-  if (type === "ecommerce") {
-    subject = "Welcome to Our IMarketplace";
-    introMessage = `
+     if (type === "ecommerce") {
+          subject = "Welcome to Our IMarketplace";
+          introMessage = `
       <p>We are thrilled to welcome you as a new vendor on our vibrant and dynamic ecommerce marketplace.</p>
       <p>We understand that getting started in a new marketplace can be both thrilling and challenging, and we want to support you every step of the way.</p>
       <p>Here are some key benefits of joining our platform:</p>
@@ -204,9 +200,9 @@ const sendWelcomeEmail = (email, name, type) => {
         <li>Evaluate the effectiveness of our platform for your business.</li>
       </ul>
     `;
-  } else if (type === "service") {
-    subject = "Welcome to Our ImarketPlace Service Platform";
-    introMessage = `
+     } else if (type === "service") {
+          subject = "Welcome to Our ImarketPlace Service Platform";
+          introMessage = `
       <p>We are excited to welcome you to our service platform, where talented individuals like yourself connect and collaborate on various projects.</p>
       <p>As a member, you'll enjoy:</p>
       <ul>
@@ -217,13 +213,13 @@ const sendWelcomeEmail = (email, name, type) => {
         <li>A supportive community of freelancers and clients.</li>
       </ul>
     `;
-  }
+     }
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: subject,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: subject,
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -283,8 +279,9 @@ const sendWelcomeEmail = (email, name, type) => {
         <div class="container">
           <div class="header">
             <img class="logo" src="https://cdn.jsdelivr.net/gh/Richey24/imarket-cdn/src/assets/images/logo.png" alt="Company Logo">
-            <h1 style="color: #333333;">Welcome as a New ${type === "ecommerce" ? "Vendor" : "Member"
-      }!</h1>
+            <h1 style="color: #333333;">Welcome as a New ${
+                 type === "ecommerce" ? "Vendor" : "Member"
+            }!</h1>
           </div>
           <div class="message">
             <p>Dear ${name},</p>
@@ -301,41 +298,41 @@ const sendWelcomeEmail = (email, name, type) => {
       </body>
       </html>       
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendAdminResetPasswordMail = (email, name, adminId, token, url) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
-  let subject, introMessage;
-  let resetLink = `${url}/change-password/${adminId}?token=${token}`;
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
+     let subject, introMessage;
+     let resetLink = `${url}/change-password/${adminId}?token=${token}`;
 
-  subject = `Welcome ${name} to ImarketPlace Admin Service - The Guardians of Our Digital Realm!`;
-  introMessage = `
+     subject = `Welcome ${name} to ImarketPlace Admin Service - The Guardians of Our Digital Realm!`;
+     introMessage = `
 <a href="${resetLink}"><p>Click here to reset your password </p></a>
 `;
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: subject,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: subject,
+          html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -411,42 +408,42 @@ ${introMessage}
 </body>
 </html>       
 `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Admin Welcome Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Admin Welcome Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendAdminWelcomeMail = (email, name, adminId, token, url) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
-  let subject, introMessage;
-  let resetLink = `${url}/change-password/${adminId}?token=${token}`;
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
+     let subject, introMessage;
+     let resetLink = `${url}/change-password/${adminId}?token=${token}`;
 
-  subject = `Welcome ${name} to ImarketPlace Admin Service - The Guardians of Our Digital Realm!`;
-  introMessage = `
+     subject = `Welcome ${name} to ImarketPlace Admin Service - The Guardians of Our Digital Realm!`;
+     introMessage = `
 <p>We are thrilled to welcome you as a new admin member on our vibrant and dynamic ecommerce marketplace.</p>
 <a href="${resetLink}"><p>Click here to set up your password </p></a>
 `;
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: subject,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: subject,
+          html: `
 <!DOCTYPE html>
 <html>
 <head>
@@ -521,40 +518,40 @@ const sendAdminWelcomeMail = (email, name, adminId, token, url) => {
 </body>
 </html>       
 `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Admin Welcome Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Admin Welcome Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendTrialEndReminderEmail = (email, name, company_id, type) => {
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + 14);
-  const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  const formattedDate = (dt) => dt.toLocaleDateString("en-US", options);
-  const extensionLink = `https://market-server.azurewebsites.net/api/trial?company_id=${company_id}`;
+     const endDate = new Date();
+     endDate.setDate(endDate.getDate() + 14);
+     const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+     const formattedDate = (dt) => dt.toLocaleDateString("en-US", options);
+     const extensionLink = `https://market-server.azurewebsites.net/api/trial?company_id=${company_id}`;
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: subject,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: subject,
+          html: `
        <!DOCTYPE html>
        <html>
        <head>
@@ -633,38 +630,38 @@ const sendTrialEndReminderEmail = (email, name, company_id, type) => {
        </body>
        </html>                   
     `,
-  };
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     };
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendTrialExtensionEmail = (email, name, trialEndDate, type) => {
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + 14);
-  const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-  const formattedDate = (dt) => dt.toLocaleDateString("en-US", options);
+     const endDate = new Date();
+     endDate.setDate(endDate.getDate() + 14);
+     const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
+     const formattedDate = (dt) => dt.toLocaleDateString("en-US", options);
 
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  let subject, introMessage, benefitsMessage;
+     let subject, introMessage, benefitsMessage;
 
-  if (type === "ecommerce") {
-    subject = "Your Free Trial Period Has Been Extended!";
-    introMessage = `
+     if (type === "ecommerce") {
+          subject = "Your Free Trial Period Has Been Extended!";
+          introMessage = `
             <p>We hope you're enjoying your trial period on our vibrant and dynamic ecommerce marketplace.</p>
             <p>We're excited to inform you that your trial period has been extended by 7 days. You now have additional time to explore our platform, showcase your products, and familiarize yourself with all the features and tools we offer.</p>
             <p>Please note the updated trial end date:</p>
@@ -672,7 +669,7 @@ const sendTrialExtensionEmail = (email, name, trialEndDate, type) => {
               <li><span class="highlight">Trial End Date:</span> ${formattedDate(trialEndDate)}</li>
             </ul>
        `;
-    benefitsMessage = `
+          benefitsMessage = `
             <p><span class="highlight">Benefits of the Extended Trial Period:</span></p>
             <ul>
               <li>Opportunity to create and customize your ecommerce store.</li>
@@ -683,9 +680,9 @@ const sendTrialExtensionEmail = (email, name, trialEndDate, type) => {
               <li>Evaluate the effectiveness of our platform for your business.</li>
             </ul>
        `;
-  } else if (type === "service") {
-    subject = "Your Free Trial Period Has Been Extended!";
-    introMessage = `
+     } else if (type === "service") {
+          subject = "Your Free Trial Period Has Been Extended!";
+          introMessage = `
             <p>We hope you're enjoying your trial period with iMarketplace Service, your partner in success and empowerment.</p>
             <p>We're excited to inform you that your trial period has been extended by 7 days. You now have additional time to explore the benefits of our service, connect with our team, and make the most of the resources available to you.</p>
             <p>Please note the updated trial end date:</p>
@@ -693,7 +690,7 @@ const sendTrialExtensionEmail = (email, name, trialEndDate, type) => {
               <li><span class="highlight">Trial End Date:</span> ${formattedDate(trialEndDate)}</li>
             </ul>
        `;
-    benefitsMessage = `
+          benefitsMessage = `
             <p><span class="highlight">Benefits of the Extended Trial Period with iMarketplace Service:</span></p>
             <ul>
               <li>Access to a team of experienced and dedicated professionals.</li>
@@ -704,13 +701,13 @@ const sendTrialExtensionEmail = (email, name, trialEndDate, type) => {
               <li>Regular updates on industry trends and business insights.</li>
             </ul>
        `;
-  }
+     }
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: subject,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: subject,
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -795,32 +792,32 @@ const sendTrialExtensionEmail = (email, name, trialEndDate, type) => {
       </body>
       </html>        
  `,
-  };
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     };
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendSubscriptionEmail = (email, name) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Thank You for Subscribing to Our Service",
-    html: `
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Thank You for Subscribing to Our Service",
+          html: `
     <!DOCTYPE html>
     <html>
     <head>
@@ -904,32 +901,32 @@ const sendSubscriptionEmail = (email, name) => {
     </body>
     </html>       
  `,
-  };
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     };
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendSubscriptionExpiredEmail = (email, name) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Subscription Expired or Canceled",
-    html: `
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Subscription Expired or Canceled",
+          html: `
     <!DOCTYPE html>
     <html>
     <head>
@@ -1009,33 +1006,33 @@ const sendSubscriptionExpiredEmail = (email, name) => {
     </body>
     </html>       
  `,
-  };
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     };
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendCouponEmail = (email, name) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "FREE Ads Code: Supercharge Your Sales Today!",
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: "FREE Ads Code: Supercharge Your Sales Today!",
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1095,8 +1092,9 @@ const sendCouponEmail = (email, name) => {
         <div class="container">
           <div class="header">
             <img class="logo" src="https://cdn.jsdelivr.net/gh/Richey24/imarket-cdn/src/assets/images/logo.png" alt="Company Logo">
-            <h1 style="color: #333333;">Welcome as a New ${type === "ecommerce" ? "Vendor" : "Member"
-      }!</h1>
+            <h1 style="color: #333333;">Welcome as a New ${
+                 type === "ecommerce" ? "Vendor" : "Member"
+            }!</h1>
           </div>
           <div class="message">
             <p>Dear ${name},</p>
@@ -1127,34 +1125,34 @@ const sendCouponEmail = (email, name) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendForgotPasswordEmail = (email, name, token, url) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Reset Password",
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Reset Password",
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1233,34 +1231,34 @@ const sendForgotPasswordEmail = (email, name, token, url) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendSubscriptionCancelEmail = (email, name, token) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Your Subscription - Let's Talk",
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Your Subscription - Let's Talk",
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1343,34 +1341,34 @@ const sendSubscriptionCancelEmail = (email, name, token) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendAdminMessage = (email, name, message) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Important: New Message From Admin",
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: "Important: New Message From Admin",
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1443,34 +1441,34 @@ const sendAdminMessage = (email, name, message) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendVendorMessage = (email, name, message, orderID) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: `Important: New Message Regarding Your Order: ${orderID}`,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: `Important: New Message Regarding Your Order: ${orderID}`,
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1543,34 +1541,34 @@ const sendVendorMessage = (email, name, message, orderID) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendCreateEventMail = (email, token) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: `Finish Creating Your Event`,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: `Finish Creating Your Event`,
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1643,34 +1641,34 @@ const sendCreateEventMail = (email, token) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendVideoInvite = (email, url, name) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: `Video Meeting Invitation`,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: `Video Meeting Invitation`,
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1743,34 +1741,34 @@ const sendVideoInvite = (email, url, name) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendRatingMail = (email, name, url, product) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: `Your Order ${product._id} - Please rate the products you purchased!`,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: `Your Order ${product._id} - Please rate the products you purchased!`,
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -1874,36 +1872,36 @@ const sendRatingMail = (email, name, url, product) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Email sent: " + info.response);
+               // do something useful
+          }
+     });
 };
 
 const sendAdvertisementNotificationEmail = (
-  email,
-  userName,
-  advertisementDetails,
-  advertisementLink,
+     email,
+     userName,
+     advertisementDetails,
+     advertisementLink,
 ) => {
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const subject = `New Advertisement Alert - Explore Now!`;
-  const introMessage = `
+     const subject = `New Advertisement Alert - Explore Now!`;
+     const introMessage = `
   <p>Dear ${userName},</p>
   <p>We're thrilled to inform you about a new advertisement from one of our vendors. Don't miss out on the latest offers!</p>
   <p><strong>Advertisement Details:</strong></p>
@@ -1915,11 +1913,11 @@ const sendAdvertisementNotificationEmail = (
   <a class="cta-button" href="${advertisementLink}">Explore Now</a>
   `;
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: subject,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: email,
+          subject: subject,
+          html: `
        <!DOCTYPE html>
        <html>
        <head>
@@ -1991,19 +1989,19 @@ const sendAdvertisementNotificationEmail = (
        </body>
        </html>       
        `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Advertisement Notification Email sent: " + info.response);
-    }
-  });
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log(error);
+          } else {
+               console.log("Advertisement Notification Email sent: " + info.response);
+          }
+     });
 };
 
 const createOrderTable = (order) => {
-  let table = `
+     let table = `
           <h3>Order # ${order.orderId}</h3>
           
           <table border="1" class='table'>
@@ -2014,44 +2012,44 @@ const createOrderTable = (order) => {
               <th>Price</th>
             </tr>`;
 
-  order.items.map((item, index) => {
-    table += `
+     order.items.map((item, index) => {
+          table += `
             <tr>
               <td>${index + 1}</td>
               <td>${item.name}</td>
               <td>${item.quantity}</td>
               <td>$${item.price.toFixed(2)}</td>
             </tr>`;
-  });
+     });
 
-  table += "</table>";
-  return table;
+     table += "</table>";
+     return table;
 };
 
 const createOrderReport = (orders) => {
-  let totalRevenue = 0;
-  let numberOfOrders = 0;
-  let numberOfItems = 0;
+     let totalRevenue = 0;
+     let numberOfOrders = 0;
+     let numberOfItems = 0;
 
-  if (Array.isArray(orders)) {
-    numberOfOrders = orders.length;
-    orders.forEach((order) => {
-      order.items.forEach((item) => {
-        numberOfItems += item.quantity;
-        totalRevenue += item.quantity * item.price;
-      });
-    });
-  } else {
-    numberOfOrders = 1;
-    orders.items.forEach((item) => {
-      numberOfItems += item.quantity;
-    });
-    totalRevenue = orders.items.reduce((total, item) => {
-      const subtotal = item.quantity * item.price;
-      return total + subtotal;
-    }, 0);
-  }
-  let report = `
+     if (Array.isArray(orders)) {
+          numberOfOrders = orders.length;
+          orders.forEach((order) => {
+               order.items.forEach((item) => {
+                    numberOfItems += item.quantity;
+                    totalRevenue += item.quantity * item.price;
+               });
+          });
+     } else {
+          numberOfOrders = 1;
+          orders.items.forEach((item) => {
+               numberOfItems += item.quantity;
+          });
+          totalRevenue = orders.items.reduce((total, item) => {
+               const subtotal = item.quantity * item.price;
+               return total + subtotal;
+          }, 0);
+     }
+     let report = `
       <div class='box-container'>
         <div className="box">
           <div class="box-content">
@@ -2100,29 +2098,28 @@ const createOrderReport = (orders) => {
       </div>
     `;
 
-  return report;
+     return report;
 };
 
-
 const sendPurchaseEmailPerSales = (vendorEmail, orderDetails) => {
-  //  const { orderId, items } = orderDetails;
-  const orderTable = createOrderTable(orderDetails);
-  const report = createOrderReport(orderDetails);
-  const transporter = nodemailer.createTransport({
-    host: "smtp.office365.com",
-    port: 587,
-    secure: false,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASSWORD,
-    },
-  });
+     //  const { orderId, items } = orderDetails;
+     const orderTable = createOrderTable(orderDetails);
+     const report = createOrderReport(orderDetails);
+     const transporter = nodemailer.createTransport({
+          host: "smtp.office365.com",
+          port: 587,
+          secure: false,
+          auth: {
+               user: process.env.EMAIL,
+               pass: process.env.PASSWORD,
+          },
+     });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: vendorEmail,
-    subject: `New Order Email:`,
-    html: `
+     const mailOptions = {
+          from: process.env.EMAIL,
+          to: vendorEmail,
+          subject: `New Order Email:`,
+          html: `
       <!DOCTYPE html>
       <html>
       <head>
@@ -2272,164 +2269,118 @@ const sendPurchaseEmailPerSales = (vendorEmail, orderDetails) => {
       </body>
       </html>
     `,
-  };
+     };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log("Email sending error", error);
-    } else {
-      console.log("Email sent: " + info.response);
-      // do something useful
-    }
-  });
-};
-
-
-const sendSalesReport = async (companyId, orderDetails) => {
-  try {
-    const company = await findCompanyByCompanyIdAndPopulateUser(companyId);
-    if (company) {
-      const { user_id: user } = company;
-      if (user.salesEmailReport.status) {
-        if (user.salesEmailReport.frequency === "Per sales") {
-          sendPurchaseEmailPerSales(user.email, orderDetails);
-        } else {
-          // Find existing OrderEmail document for the user's email
-          const existingOrderEmail = await OrderEmail.findOne({ email: user.email });
-
-          // Create new order object
-          const newOrder = {
-            orderId: orderDetails.orderId,
-            items: orderDetails.items,
-          };
-
-          if (existingOrderEmail) {
-            // If existing OrderEmail document found, push new order to orders array
-            existingOrderEmail.orders.push(newOrder);
-            await existingOrderEmail.save();
+     transporter.sendMail(mailOptions, function (error, info) {
+          if (error) {
+               console.log("Email sending error", error);
           } else {
-            // If no existing OrderEmail document found, create new document
-            const orderEmail = new OrderEmail({
-              email: user.email,
-              orders: [newOrder],
-              timeZone: user.timeZone,
-            });
-            await orderEmail.save();
-            console.log("New OrderEmail document created with order");
+               console.log("Email sent: " + info.response);
+               // do something useful
           }
-        }
-      } else {
-        console.log("email status is off");
-      }
-    } else {
-      console.log("Company not found");
-    }
-  } catch (err) {
-    console.log(err);
-  }
+     });
 };
 
 const formatDate = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
-  const day = String(date.getDate()).padStart(2, "0");
-  const formattedDate = `${year}-${month}-${day}`;
-  return formattedDate;
+     const year = date.getFullYear();
+     const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-based
+     const day = String(date.getDate()).padStart(2, "0");
+     const formattedDate = `${year}-${month}-${day}`;
+     return formattedDate;
 };
 
 const deleteUserData = async (userId, companyId, siteId) => {
-  try {
-    // Step 1: Find the user
-    const user = await User.findById(userId);
+     try {
+          // Step 1: Find the user
+          const user = await User.findById(userId);
 
-    if (!user) {
-      return { success: false, message: "User not found" };
-    }
+          if (!user) {
+               return { success: false, message: "User not found" };
+          }
 
-    // Step 2: Delete associated advertisements (adverts) by their _id values
-    if (siteId) {
-      await Advert.deleteMany({ _id: { $in: siteId } });
-    }
+          // Step 2: Delete associated advertisements (adverts) by their _id values
+          if (siteId) {
+               await Advert.deleteMany({ _id: { $in: siteId } });
+          }
 
-    // Step 3: Find and delete the user's associated site if it exists
-    if (siteId) {
-      await Site.findByIdAndRemove(siteId);
-    }
+          // Step 3: Find and delete the user's associated site if it exists
+          if (siteId) {
+               await Site.findByIdAndRemove(siteId);
+          }
 
-    // Step 4: Find and delete the user's associated company if it exists
-    if (companyId) {
-      await Company.findByIdAndRemove(companyId);
-    }
+          // Step 4: Find and delete the user's associated company if it exists
+          if (companyId) {
+               await Company.findByIdAndRemove(companyId);
+          }
 
-    // Step 5: Delete the user account
-    await User.findByIdAndRemove(userId);
+          // Step 5: Delete the user account
+          await User.findByIdAndRemove(userId);
 
-    return {
-      success: true,
-      message: "Account, associated site, company, advertisements, and data deleted successfully",
-    };
-  } catch (error) {
-    console.error("Error deleting account:", error);
-    return { success: false, message: "Internal server error" };
-  }
+          return {
+               success: true,
+               message: "Account, associated site, company, advertisements, and data deleted successfully",
+          };
+     } catch (error) {
+          console.error("Error deleting account:", error);
+          return { success: false, message: "Internal server error" };
+     }
 };
 
 const sentReminders = new Set();
 
 const reminderJob = () => {
-  cron.schedule("0 9 * * *", () => {
-    const currentDate = formatDate(new Date());
+     cron.schedule("0 9 * * *", () => {
+          const currentDate = formatDate(new Date());
 
-    Company.find({ trial_end_date: currentDate }, async (err, companies) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+          Company.find({ trial_end_date: currentDate }, async (err, companies) => {
+               if (err) {
+                    console.error(err);
+                    return;
+               }
 
-      for (const company of companies) {
-        const userId = company.user_id;
+               for (const company of companies) {
+                    const userId = company.user_id;
 
-        // Check if a reminder has already been sent for this user
-        if (!sentReminders.has(userId)) {
-          try {
-            const user = await User.findById(userId);
-            if (user) {
-              sendTrialEndReminderEmail(
-                user.email,
-                user.firstname,
-                company._id,
-              );
-              sentReminders.add(userId); // Mark the reminder as sent
-            }
-          } catch (error) {
-            console.error(error);
-          }
-        }
-      }
-    });
-  });
+                    // Check if a reminder has already been sent for this user
+                    if (!sentReminders.has(userId)) {
+                         try {
+                              const user = await User.findById(userId);
+                              if (user) {
+                                   sendTrialEndReminderEmail(
+                                        user.email,
+                                        user.firstname,
+                                        company._id,
+                                   );
+                                   sentReminders.add(userId); // Mark the reminder as sent
+                              }
+                         } catch (error) {
+                              console.error(error);
+                         }
+                    }
+               }
+          });
+     });
 };
 
 module.exports = {
-  sendOnboardingEmail,
-  sendAdminWelcomeMail,
-  sendAdminResetPasswordMail,
-  sendTrialEndReminderEmail,
-  sendTrialExtensionEmail,
-  sendSubscriptionEmail,
-  sendSubscriptionExpiredEmail,
-  sendCouponEmail,
-  sendRatingMail,
-  formatDate,
-  sendAdvertisementNotificationEmail,
-  reminderJob,
-  sendWelcomeEmail,
-  sendForgotPasswordEmail,
-  sendAdminMessage,
-  sendVendorMessage,
-  sendSubscriptionCancelEmail,
-  deleteUserData,
-  sendCreateEventMail,
-  sendSalesReport,
-  sendVideoInvite
+     sendOnboardingEmail,
+     sendAdminWelcomeMail,
+     sendAdminResetPasswordMail,
+     sendTrialEndReminderEmail,
+     sendTrialExtensionEmail,
+     sendSubscriptionEmail,
+     sendSubscriptionExpiredEmail,
+     sendCouponEmail,
+     sendRatingMail,
+     formatDate,
+     sendAdvertisementNotificationEmail,
+     reminderJob,
+     sendWelcomeEmail,
+     sendForgotPasswordEmail,
+     sendAdminMessage,
+     sendVendorMessage,
+     sendSubscriptionCancelEmail,
+     deleteUserData,
+     sendCreateEventMail,
+     sendVideoInvite,
 };

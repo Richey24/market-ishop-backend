@@ -13,76 +13,6 @@ const containerClient = blobClient.getContainerClient("newcontainer");
 const { default: algoliasearch } = require("algoliasearch");
 const { default: axios } = require("axios");
 
-exports.createService = async (req, res) => {
-     try {
-          let user = req.userData;
-
-          //   console.log("user", user);
-          //   const file = req.file;
-          if (!user) {
-               return res.status(400).json({ message: "Send userId", status: false });
-          }
-          const result = await Service.create({
-               ...req.body,
-               userId: user._id,
-               email: user?.email,
-          });
-
-          const client = algoliasearch("CM2FP8NI0T", "daeb45e2c3fb98833358aba5e0c962c6");
-          const index = client.initIndex("service-title");
-          index.search(req.body.title).then(async ({ hits }) => {
-               if (hits.length < 1) {
-                    await index.saveObject(
-                         { title: req.body.title },
-                         {
-                              autoGenerateObjectIDIfNotExist: true,
-                         },
-                    );
-               }
-          });
-          //   await ServiceThirdCat.findOneAndUpdate({ name: serviceType }, { $inc: { count: 1 } });
-          res.status(201).json({ result, status: true });
-     } catch (err) {
-          console.log("error", err);
-          res.status(500).json({ err, status: false });
-     }
-};
-
-exports.updateService = async (req, res) => {
-     try {
-          const id = req.params.id;
-          const body = req.body;
-          if (!id) {
-               return res.status(400).json({ message: "Send service id", status: false });
-          }
-          //   if (file) {
-          //        const imageClient = containerClient.getBlockBlobClient(file.filename);
-          //        const response = await imageClient.uploadFile(file.path, {
-          //             blobHTTPHeaders: {
-          //                  blobContentType: file.mimetype,
-          //             },
-          //        });
-          //        // delete image from folder after it is uploaded
-          //        fs.unlink(file.path, (err) => {
-          //             if (err) {
-          //                  console.log(err);
-          //             }
-          //        });
-          //        if (response._response.status !== 201) {
-          //             console.log("error");
-          //             return res
-          //                  .status(400)
-          //                  .json({ message: "An error occured uploading the image" });
-          //        }
-
-          //        body.image = `https://absa7kzimnaf.blob.core.windows.net/newcontainer/${file.filename}`;
-          //   }
-          const result = await Service.findByIdAndUpdate(id, body, { new: true });
-          res.status(201).json({ result, status: true });
-     } catch (err) {
-          res.status(500).json({ err, status: false });
-     }
-};
 
 exports.toggleServiceAvailability = async (req, res) => {
      try {
@@ -200,19 +130,6 @@ exports.searchService = async (req, res) => {
           });
           const result = await Service.find(obj);
           res.status(200).json({ result, status: true });
-     } catch (err) {
-          res.status(500).json({ err, status: false });
-     }
-};
-
-exports.deleteService = async (req, res) => {
-     try {
-          const id = req.params.id;
-          if (!id) {
-               return res.status(400).json({ message: "Send service id", status: false });
-          }
-          await Service.findByIdAndDelete(id);
-          res.status(200).json({ deleted: true });
      } catch (err) {
           res.status(500).json({ err, status: false });
      }

@@ -1,8 +1,7 @@
 const advertService = require("../../services/advert.service");
 const companyModel = require("../../model/Company");
-const Odoo = require("../../config/odoo.connection");
 const { successResponder, errorResponder } = require("../../utils/http_responder");
-const { getProductById } = require("../../services/product.service");
+
 class AdvertController {
      async createAdvertType(req, res) {
           const type = await advertService.createAdvertType(req.body);
