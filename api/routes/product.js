@@ -1,7 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const auth = require("../../config/auth");
-const multer = require("multer");
 const productController = require("../controllers/productController");
 
 // router.get("/:companyId/:productId", productController.getProductById);
