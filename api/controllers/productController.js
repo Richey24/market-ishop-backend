@@ -215,6 +215,95 @@ exports.searchProduct = async (req, res) => {
      }
 };
 
+exports.getRandomProduct = async (req, res) => {
+     try {
+          // Connect to Odoo
+          await Odoo.connect();
+
+          // Fetch public categories
+          const categories = await Odoo.execute_kw("product.public.category", "search_read", [
+               [],
+               ["id", "name"],
+          ]);
+
+          if (categories.length === 0) {
+               throw new Error("No categories found.");
+          }
+
+          // Select a random set of category IDs
+          const selectRandomCategoryIds = (categories, count) => {
+               const shuffled = categories.sort(() => 0.5 - Math.random());
+               return shuffled.slice(0, count).map((category) => category.id);
+          };
+          const randomCategoryIds = selectRandomCategoryIds(categories, 5); // Select 5 random category IDs
+
+          // Fetch products based on the selected category IDs
+          const fields = [
+               "id",
+               "name",
+               "display_name",
+               "list_price",
+               "company_id",
+               "standard_price",
+               "description",
+               "base_unit_count",
+               "categ_id",
+               "rating_avg",
+               "x_color",
+               "x_dimension",
+               "x_size",
+               "x_subcategory",
+               "x_weight",
+               "x_rating",
+               "x_images",
+               "rating_count",
+               "website_url",
+               "public_categ_ids",
+               "x_show_sold_count",
+               "x_inventory_tracking",
+               "x_discount",
+               "website_meta_keywords",
+               "sales_count",
+          ];
+
+          const params = [
+               ["public_categ_ids", "in", randomCategoryIds],
+               ["sales_count", ">", 0],
+          ];
+
+          let products = await Odoo.execute_kw(
+               "product.template",
+               "search_read",
+               [params, fields],
+               null,
+               200,
+          );
+
+          // If the number of products is less than 20, fetch the latest products to make up the difference
+          if (products.length < 100) {
+               const additionalProducts = await Odoo.execute_kw("product.template", "search_read", [
+                    [],
+                    fields,
+                    null,
+                    200 - products.length,
+               ]);
+               products = products.concat(additionalProducts);
+          }
+
+          if (products.length === 0) {
+               throw new Error("No popular products found.");
+          }
+
+          // Randomize the products
+          const randomizedProducts = products.sort(() => Math.random() - 0.5);
+
+          res.status(200).json({ products: randomizedProducts, status: true });
+     } catch (error) {
+          console.error("Error fetching random popular product:", error);
+          res.status(400).json({ error, status: false });
+     }
+};
+
 exports.rateProduct = async (req, res) => {
      try {
           const { productId, userId, title, name, detail, rating } = req.body;
