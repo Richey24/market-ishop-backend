@@ -13,16 +13,12 @@ exports.register = async (req, res) => {
           await Odoo.connect();
 
           const ipAddress = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-          console.log("IP Address:", ipAddress);
-
           // Fetch timezone information using the IP address
           const response = await axios.get(`http://ip-api.com/json/${ipAddress}`);
           const timezone = response.data.timezone;
 
-          console.log("Timezone:", timezone);
           // TODO: add tenant id to verify
           let user = await User.findOne({ email: req.body.email });
-          // console.log("user", user);
           if (req.body.role === "VENDOR" && user) {
                return res.status(409).json({
                     message: "email already in use",
@@ -60,7 +56,6 @@ exports.register = async (req, res) => {
                          is_published: true,
                     },
                ]);
-               console.log("Partner created successfully. Partner ID:", partner_id);
           }
 
           let data;
@@ -132,7 +127,6 @@ exports.confirmEmail = async (req, res) => {
                "partner_ids.domain": req.body.domain,
                email: req.body.email,
           });
-          // console.log("domainExists", domainExists, req.body);
           if (domainExists) {
                return res.status(409).json({
                     message: "Account Already Exist for this Site",
@@ -232,7 +226,6 @@ exports.socialRegister = async (req, res) => {
                          is_published: true,
                     },
                ]);
-               console.log("Partner created successfully. Partner ID:", partner_id);
           }
           let data;
           let token;
@@ -308,7 +301,6 @@ exports.logoutUser = async (req, res) => {
 };
 
 exports.updateUserDetails = async (req, res) => {
-     console.log("Request body", req.body);
      try {
           const updatedUserData = {
                firstname: req.body?.firstname,
@@ -321,7 +313,6 @@ exports.updateUserDetails = async (req, res) => {
                timeZone: req.body?.timeZone,
           };
 
-          console.log("updatedUserData", updatedUserData);
 
           // Assuming you have a User model and a method like `updateUserById` to update a user by ID
           const updatedUser = await User.findByIdAndUpdate(

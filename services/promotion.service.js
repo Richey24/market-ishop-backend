@@ -49,7 +49,6 @@ const getPromotion = async (params) => {
                               obj.reward_ids[0],
                          ]),
                     };
-                    console.log(data);
                     return data;
                }),
           );
