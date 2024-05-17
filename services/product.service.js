@@ -4,7 +4,6 @@ const { toDataURL } = require("../utils/imageBase64");
 const unitOfMeasure = async (odoo) => {
      try {
           await odoo.connect();
-          console.log("Get unit of mesasure");
           let uom = await odoo.execute_kw("uom.uom", "search_read", []);
           return { uom };
      } catch (e) {
@@ -79,7 +78,6 @@ const getProductById = async (id) => {
                     //           [[valueId], []],
                     //      );
 
-                    //      console.log("Attribute Value ID:", attributeValueData);
                     // }
 
                     productTemplateValueIds = productTemplateValueIds?.map(
@@ -333,13 +331,11 @@ const addProductVariant = async (params) => {
                // qty_available: 5,
           };
 
-          console.log("templateData", templateData);
           const templateId = await createProductTemplate(params, templateData);
 
           if (params?.product?.variants && params?.product?.variants.length > 0) {
                await params?.product?.variants?.forEach(async (container) => {
                     await container.forEach(async (variant, idx) => {
-                         // console.log("variant", variant);
 
                          let attributeValueId;
 
@@ -349,7 +345,6 @@ const addProductVariant = async (params) => {
                                    attribute_id: variant?.attributeId,
                                    sequence: 1, // Optional: Display sequence
                               };
-                              console.log(attributeValueData);
                               attributeValueId = await params.odoo.execute_kw(
                                    "product.attribute.value",
                                    "create",
@@ -358,7 +353,6 @@ const addProductVariant = async (params) => {
                          } else {
                               attributeValueId = variant?.valueId;
                          }
-                         console.log(attributeValueId);
                          const attributeLineData = {
                               product_tmpl_id: templateId,
                               attribute_id: variant?.attributeId,
@@ -415,7 +409,6 @@ const updateProduct = async (params) => {
           // });
 
           await params.odoo.connect();
-          console.log(" params.product", params.product);
           // Create the product
           const productData = {
                base_unit_count: params.product.qty,
@@ -446,7 +439,6 @@ const updateProduct = async (params) => {
                [+params?.productId],
                productData,
           ]);
-          console.log("result", result);
 
           if (result) {
                console.log("Product data updated successfully. Product ID:", +params?.productId);
@@ -524,7 +516,6 @@ const getProductDetails = async (productId) => {
                     return attachment?.res_id === productId;
                });
 
-               console.log("et", et);
           }
           // const productImages = await Odoo.execute_kw("product.image", "search_read", [
           //      [["product_tmpl_id", "=", id]],

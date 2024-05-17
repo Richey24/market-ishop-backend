@@ -11,7 +11,6 @@ class CategoryController {
                     [],
                ]);
 
-               console.log("heyyyyyy");
                res.status(200).json({ categories, status: true });
           } catch (e) {
                res.status(500).json({ error: e, status: false });

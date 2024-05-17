@@ -383,7 +383,6 @@ const getOdooSuggestions = async (query) => {
 exports.searchProductsAndcateg = async (req, res) => {
      try {
           const query = req.query.q || "";
-          console.log("req.query.q", req.query.q);
           // Fetch suggestions from Odoo
           const odooSuggestions = await getOdooSuggestions(query);
 
