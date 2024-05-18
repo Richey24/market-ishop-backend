@@ -295,7 +295,13 @@ exports.getRandomProduct = async (req, res) => {
           }
 
           // Randomize the products
-          const randomizedProducts = products.sort(() => Math.random() - 0.5);
+          const randomizedProducts = products.sort(() => Math.random() - 0.5).map((product) => {
+               return {
+                    ...product,
+                    x_discount: product?.x_discount ? JSON.parse(product?.x_discount) : null,
+                    x_images: JSON.parse(product.x_images),
+               };
+          });
 
           res.status(200).json({ products: randomizedProducts, status: true });
      } catch (error) {
