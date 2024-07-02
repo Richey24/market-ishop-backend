@@ -223,7 +223,7 @@ exports.getRandomProduct = async (req, res) => {
 
           // Fetch public categories
           const categories = await Odoo.execute_kw("product.public.category", "search_read", [
-               [["x_disabled", "!=", true]],
+               [],
                ["id", "name"],
           ]);
 
@@ -270,6 +270,7 @@ exports.getRandomProduct = async (req, res) => {
           const params = [
                ["public_categ_ids", "in", randomCategoryIds],
                ["sales_count", ">", 0],
+               ["x_disabled", "!=", true]
           ];
 
           let products = await Odoo.execute_kw(
@@ -438,12 +439,12 @@ const getOdooSuggestions = async (query) => {
           const categorySuggestions = await Odoo.execute_kw(
                "product.public.category",
                "search_read",
-               [[["name", "ilike", query], ["x_disabled", "!=", true]], ["name"]],
+               [[["name", "ilike", query]], ["name"]],
           );
 
           // Fetch product suggestions from Odoo
           const productSuggestions = await Odoo.execute_kw("product.template", "search_read", [
-               [["name", "ilike", query]],
+               [["name", "ilike", query], ["x_disabled", "!=", true]],
                [
                     "name",
                     "standard_price",
