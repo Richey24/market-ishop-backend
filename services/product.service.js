@@ -175,7 +175,7 @@ const searchProducts = async (params) => {
                "product.template",
                "search_read",
                [
-                    [...params],
+                    [...params, ["x_disabled", "!=", true]],
                     [
                          "id",
                          "name",

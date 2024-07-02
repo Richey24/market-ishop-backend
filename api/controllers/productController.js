@@ -20,6 +20,7 @@ exports.getProductbyCategory = async (req, res) => {
                          ["public_categ_ids", "=", categoryId],
                          ["type", "=", "consu"],
                          ["company_id", "=", companyId],
+                         ["x_disabled", "!=", true]
                     ],
                     [
                          "id",
@@ -77,7 +78,7 @@ exports.filterProducts = async (req, res) => {
 
           if (category === null) {
                let theProducts = await Odoo.execute_kw("product.product", "search_read", [
-                    [["type", "=", "consu"]],
+                    [["type", "=", "consu"], ["x_disabled", "!=", true]],
                     [
                          "name",
                          "list_price",
@@ -222,7 +223,7 @@ exports.getRandomProduct = async (req, res) => {
 
           // Fetch public categories
           const categories = await Odoo.execute_kw("product.public.category", "search_read", [
-               [],
+               [["x_disabled", "!=", true]],
                ["id", "name"],
           ]);
 
@@ -390,7 +391,7 @@ exports.getAdsProduct = async (req, res) => {
           await Odoo.connect();
           console.log("Connect to Odoo XML-RPC - api/products");
           const theProducts = await Odoo.execute_kw("product.template", "search_read", [
-               [["x_ads_num", "=", "1"]],
+               [["x_ads_num", "=", "1"], ["x_disabled", "!=", true]],
                [
                     "id",
                     "name",
@@ -437,7 +438,7 @@ const getOdooSuggestions = async (query) => {
           const categorySuggestions = await Odoo.execute_kw(
                "product.public.category",
                "search_read",
-               [[["name", "ilike", query]], ["name"]],
+               [[["name", "ilike", query], ["x_disabled", "!=", true]], ["name"]],
           );
 
           // Fetch product suggestions from Odoo
