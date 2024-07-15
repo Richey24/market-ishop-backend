@@ -284,7 +284,7 @@ exports.getRandomProduct = async (req, res) => {
           // If the number of products is less than 20, fetch the latest products to make up the difference
           if (products.length < 100) {
                const additionalProducts = await Odoo.execute_kw("product.template", "search_read", [
-                    [],
+                    [["x_disabled", "!=", true]],
                     fields,
                     null,
                     200 - products.length,
