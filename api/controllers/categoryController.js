@@ -7,10 +7,13 @@ class CategoryController {
           try {
                await Odoo.connect();
 
-               let categories = await Odoo.execute_kw("product.public.category", "search_read", [
-                    [],
-               ]);
-
+             let categories = await Odoo.execute_kw("product.public.category", "search_read", [
+               [],
+               [
+                    "id",
+                    "name"
+               ]
+          ]);
                res.status(200).json({ categories, status: true });
           } catch (e) {
                res.status(500).json({ error: e, status: false });
