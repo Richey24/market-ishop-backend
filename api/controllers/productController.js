@@ -242,29 +242,12 @@ exports.getRandomProduct = async (req, res) => {
           const fields = [
                "id",
                "name",
-               "display_name",
-               "list_price",
                "company_id",
                "standard_price",
-               "description",
-               "base_unit_count",
-               "categ_id",
-               "rating_avg",
-               "x_color",
-               "x_dimension",
-               "x_size",
-               "x_subcategory",
-               "x_weight",
                "x_rating",
                "x_images",
-               "rating_count",
-               "website_url",
                "public_categ_ids",
-               "x_show_sold_count",
-               "x_inventory_tracking",
                "x_discount",
-               "website_meta_keywords",
-               "sales_count",
           ];
 
           const params = [
@@ -276,13 +259,11 @@ exports.getRandomProduct = async (req, res) => {
           let products = await Odoo.execute_kw(
                "product.template",
                "search_read",
-               [params, fields],
-               null,
-               200,
+               [params, fields, 1, 120]
           );
 
           // If the number of products is less than 20, fetch the latest products to make up the difference
-          if (products.length < 100) {
+          if (products.length < 48) {
                const additionalProducts = await Odoo.execute_kw("product.template", "search_read", [
                     [["x_disabled", "!=", true]],
                     fields,
@@ -301,7 +282,7 @@ exports.getRandomProduct = async (req, res) => {
                return {
                     ...product,
                     x_discount: product?.x_discount ? JSON.parse(product?.x_discount) : null,
-                    x_images: JSON.parse(product.x_images),
+                    x_images: JSON.parse(product.x_images).slice(0, 1),
                };
           });
 
